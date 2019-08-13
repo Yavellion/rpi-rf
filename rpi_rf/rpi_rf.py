@@ -123,6 +123,29 @@ class RFDevice:
             self.tx_length = 64
         _LOGGER.debug("TX code: " + str(code))
         return self.tx_bin(rawcode)
+      
+    def tx_bin_code(self, code, tx_proto=None, tx_pulselength=None):
+        """
+        Send a binary code.
+
+        Optionally set protocol and pulselength.
+        When none given reset to default protocol and default pulselength.
+        """
+        if tx_proto:
+            self.tx_proto = tx_proto
+        else:
+            self.tx_proto = 1
+        if tx_pulselength:
+            self.tx_pulselength = tx_pulselength
+        elif not self.tx_pulselength:
+            self.tx_pulselength = PROTOCOLS[self.tx_proto].pulselength
+        
+        self.tx_length = len(code)
+            
+        rawcode = code
+        
+        _LOGGER.debug("TX BIN code: " + str(code))
+        return self.tx_bin(rawcode)
 
     def tx_bin(self, rawcode):
         """Send a binary code."""
